@@ -10,6 +10,8 @@ environment:
 
 platform: x86
 
+configuration: Release
+
 init:
   - cmd: ECHO Processor architecture - %PROCESSOR_ARCHITECTURE%
   - cmd: wmic OS get OSArchitecture
@@ -29,17 +31,23 @@ init:
   - cmd: ECHO Path - %PATH%
 
 
-build_script:
-- cmd: >-
-    pip install flask
-    
-    pip install flask-socketio
-    
-    pip install esky
-    
-    pip install eventlet
-    
-    pip install py2exe_py2
+install:
+  # Git clone happens between init and install 
+  - cmd: git submodule update --init --recursive
 
-    python -OO setup.py bdist_esky
-  
+  # Upgrade to the latest version of pip to avoid it displaying warnings
+  # about it being out of date.
+  - cmd: pip install --disable-pip-version-check --user --upgrade pip
+
+  # Install python dependencies
+  # - cmd: pip install https://dl.dropboxusercontent.com/u/74034/ardublockly-dep/win/py2exe-0.6.10a1-cp27-none-win32.whl
+  - cmd: pip install flask
+  - cmd: pip install flask-socketio
+  - cmd: pip install esky
+  - cmd: pip install eventlet
+  - cmd: pip install py2exe_py2
+
+  - cmd: python -O0 setup.py bdist_esky
+
+# Not a project with an msbuild file, build done at install.
+build: off 
