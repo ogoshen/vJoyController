@@ -15,13 +15,13 @@ from esky.bdist_esky import Executable
 
 executables = [Executable('main.py', icon='favicon.ico',)]
 
-py2exe_opts = dict(
-	optimize=0,
-	compressed=1,
+freezer_opts = dict(
+	# optimize=0,
+	# compressed=1,
 	# optimize=2,
 	# bundle_files=1,
 	# bundle_files=2,
-	bundle_files=3,
+	# bundle_files=3,
 	packages=['vjoy', 'engineio'],
 	includes=[
 		# 'vjoy',
@@ -43,9 +43,9 @@ vjoy_files += glob.glob('./vjoy/*.pyd')
 
 
 esky_opts = {
-	"freezer_module":"py2exe", 
+	"freezer_module":"cxfreeze", 
 	'excludes':['tkinter', 'tcl'],
-	'freezer_options': py2exe_opts,
+	'freezer_options': freezer_opts,
 	# 'compress': 'ZIP',
 	}
 
@@ -68,7 +68,7 @@ setup(
 	],
 	zipfile=None,
 	options={
-	# 'py2exe': py2exe_opts, 
+	# 'py2exe': freezer_opts, 
 	"bdist_esky": esky_opts
 	}
 )
