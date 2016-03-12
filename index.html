@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html manifest="/manifest.appcache">
+<head>
+	<title>vJoy</title>
+    <meta charset="utf-8">
+  	<meta name="description" content="vJoy Controller">
+  	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+	<meta name="mobile-web-app-capable" content="yes">
+ 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />	
+
+	<!-- Chrome for Android theme color -->
+  	<meta name="theme-color" content="#7b1fa2">
+
+	<link rel="manifest" href="manifest.json">
+
+	<script src="static/bower_components/webcomponentsjs/webcomponents.js"></script>
+	<script>
+	window.Polymer = window.Polymer || {};
+    window.Polymer.dom = 'shadow';
+	</script>
+
+	<script src="static/bower_components/underscore/underscore-min.js"></script>
+	<script src="static/bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="static/bower_components/socket.io-client/socket.io.js"></script>
+	<script src="static/bower_components/hammerjs/hammer.min.js"></script>
+	<!-- // <script src="static/bower_components/Snap.svg/dist/snap.svg-min.js"></script> -->
+	<!-- // <script src="static/bower_components/draggabilly/dist/draggabilly.pkgd.min.js"></script> -->
+
+	<link rel="import" href="static/elements.html">
+	
+	<!-- <link rel="import" href="static/bower_components/neon-animation/neon-animated-pages.html"> -->
+	<!-- <link rel="import" href="static/bower_components/neon-animation/neon-animatable.html"> -->
+
+	<link rel="import" href="static/components/joystick/joystick.html">
+
+
+<style>
+body {
+    @apply(--layout-fullbleed);
+    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+	touch-action: none;
+	overflow-y: hidden;
+    height:100%;
+    width:100%;
+    margin:0px;
+    padding:0px;
+	background: #3C3C40;
+	font-family: Roboto, 'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+}
+
+joystick {
+    display: block;
+    position: absolute;
+    top: 42px;
+    bottom: 0;
+    width: 100%;
+    overflow: hidden;
+    /*left: 2%;*/
+    /*top: 10%;*/
+    /*width: 96%;*/
+    /*height: 80%;*/
+}
+
+
+
+.ps-buttons joystick-button svg
+{
+	-webkit-filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.3))  drop-shadow(0px -1px 0px rgba(0,0,0,0.5));
+}
+
+/*joystick-button.pressed svg,
+joystick-button[pressed] svg {
+	-webkit-filter: saturate(30%) brightness(50%) drop-shadow(0 0 4px rgba(255,255,255, 0.5));
+}
+*/
+joystick-button[pressed] svg *[stroke] {
+	/*stroke: black; */
+}
+
+joystick-button[pressed] svg *[fill]:not([fill="none"]) { 
+	/*fill: black; */
+}
+
+.ps-buttons iron-icon {
+    position: absolute;	
+    transform: translate(-50%,25%);
+	width: 62%;
+	height: 62%;
+	top: 0px;
+}
+
+.ps-buttons joystick-button[pressed] iron-icon 
+{
+	top: 2px;
+}
+
+.ps-buttons {
+	width: 50vmin;
+    height: 50vmin;
+    border-radius: 50vmin;
+    border: 2px solid hsl(240, 3%, 20%);
+    box-shadow: 0 4px 10px hsl(240, 3%, 15%);
+    background: radial-gradient(ellipse at center, hsl(240, 3%, 39%) 30%, hsl(240, 3%, 20%) 80%);
+}
+
+.ps-buttons joystick-button {
+	width: 33.333%;
+	height: 33.333%;	
+}
+
+#menu-buttons {
+	background: #3C3C40;
+	width: 160px;
+    height: 60px;
+    position: absolute;
+    left: 50%;
+    top: 16px;
+    transform: translate(-50%, 0);
+    border: 2px solid hsl(240,3%,29%);
+    border-radius: 32px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.18) inset, -2px 3px 2px rgba(0, 0, 0, 0.18) inset, 0px 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+#menu-buttons joystick-button {
+	font-size: 12px;
+	font-weight: lighter;
+	color: hsl(240, 3%, 60%);
+	text-transform: uppercase;
+}
+
+
+
+.dpad {
+	/*width: 200px;*/
+    /*height: 200px;*/
+    /*border-radius: 200px;*/
+    /*border: 3px solid #333;*/
+    /*box-shadow: 0 4px 10px #333;*/
+    /*background: rgb(60,60,64);*/
+	/*background: radial-gradient(ellipse at center, hsla(240,3%,13%,1) 0%, hsla(240,3%,18%,1) 33%, hsla(240,3%,28%,1) 63%, hsla(240,3%,7%,1) 93%);*/
+}
+
+.dpad-button {
+    width: 72px;
+    height: 85px;
+    position: absolute;
+}
+
+
+
+#edit.toggle-label.style-scope.paper-toggle-button
+{
+	/*color: #ccc;*/
+	opacity: 0.5;
+}
+
+
+joystick-dpad,joystick-stick,.ps-buttons {
+	/*transition: -webkit-filter 0.1s ease-out;*/
+}
+
+
+.scaled {
+	/*-webkit-filter: drop-shadow(0 0 4px #c6c);*/
+}
+
+joystick-dpad:active.edit,
+joystick-stick:active.edit,
+.ps-buttons:active.edit,
+#menu-buttons:active.edit {
+	/*-webkit-filter: drop-shadow(0 0 4px #cc6);	*/
+}
+
+</style>
+
+<style is="custom-style">
+ 
+.dragged {
+	/*-webkit-filter: drop-shadow(0 0 8px var(--paper-purple-400));*/
+	border: 2px solid var(--paper-purple-400) !important;
+}
+
+
+#menu-buttons joystick-button[pressed] {
+	color: var(--paper-purple-200);
+}
+
+.icon-small {
+	--iron-icon-height: 18px;
+	--iron-icon-width: 18px;
+}
+
+paper-toggle-button#edit
+{
+	--paper-toggle-button-unchecked-button-color: var(--paper-purple-400);
+	--paper-toggle-button-unchecked-bar-color: var(--paper-deep-purple-200);
+	
+	--paper-toggle-button-checked-button-color: var(--paper-amber-300);
+	--paper-toggle-button-checked-bar-color: var(--paper-amber-600);
+	--paper-toggle-button-label-color: #eee;
+}
+
+  paper-toolbar {
+	@apply(--shadow-transition);
+	@apply(--shadow-elevation-4dp);
+    --paper-toolbar-background: var(--paper-purple-700);
+    --paper-toolbar-height: 40px;
+    --paper-toolbar-sm-height: 40px;
+    --paper-toolbar-title: {
+      font-style: italic;
+      font-weight: bold;
+    };
+  }
+
+  paper-toolbar span.title {
+    overflow: visible;
+	}
+
+</style>
+
+</head>
+<body unresolved>
+	<template is="dom-bind" id="app" route="main">
+
+		<paper-drawer-panel id="paperDrawerPanel" disable-edge-swipe="true" responsive-width="1920px">
+
+			<div drawer>
+				<paper-toolbar>
+				    <span class="title">
+				    vJoy Controller
+				    </span>
+				</paper-toolbar>
+				<paper-menu attr-for-selected="data-route" selected="[[route]]">
+					<paper-item id="connect_button" data-dialog="modal" onclick="document.querySelector('#'+this.getAttribute('data-dialog')).open();app.closeDrawer();">
+						<!-- <paper-button id="connect_button" style="color:black" icon="icons:link" data-dialog="modal" onclick="document.querySelector('#'+this.getAttribute('data-dialog')).open();"> -->
+						<iron-icon icon="icons:link" item-icon></iron-icon>&nbsp;
+						<dom-if if="{{socket.connected}}">
+						Connect
+						</dom-if>
+						<!-- </paper-button> -->
+					</paper-item>
+					<paper-item data-route="settings" onclick="app.route='settings';app.closeDrawer();">
+						<iron-icon icon="icons:settings" item-icon></iron-icon>&nbsp;
+						Settings
+					</paper-item>
+					<paper-item>
+						<iron-icon icon="icons:help" item-icon></iron-icon>&nbsp;
+						Help
+					</paper-item>
+					<paper-item>
+						<iron-icon icon="icons:info" item-icon></iron-icon>&nbsp;
+						About
+					</paper-item>
+				</paper-menu>
+			</div>
+			<div main>		
+				<iron-pages attr-for-selected="data-route" selected="{{route}}">
+					<section data-route="main">
+						<paper-toolbar>
+							<paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+						    <!-- <paper-button data-dialog="modal" onclick="document.querySelector('#'+this.getAttribute('data-dialog')).open()">modal dialog</paper-button> -->
+						    <span class="title">vJoy Controller</span>
+						    <label id="connection_status" style="font-size: small">
+							<!-- <iron-icon icon="device:signal-cellular-null"></iron-icon> -->
+							<!-- {{socket.connected}} -->
+							<iron-icon icon="hardware:phonelink-off" onclick="document.querySelector('#modal').toggle()"></iron-icon>
+							&nbsp;
+							&nbsp;
+							</label>
+							<paper-toggle-button checked="{{edit}}" id="edit" icon="editor:mode-edit">Edit</paper-toggle-button>
+						</paper-toolbar>
+
+						<joystick id="joystick">
+							<!-- <joystick-socket id="joystick-socket" host="localhost" port="8000" rate="33"></joystick-socket> -->
+
+							<div id="menu-buttons">
+							 	<joystick-button index="6"  style="left: 14px; top: 10px; width:60px; height: 40px;">
+							 	Select
+							 	</joystick-button>
+							 	<joystick-button index="7"  style="right: 14px; top: 10px; width:60px; height: 40px;">
+							 	Start
+							 	</joystick-button>
+							</div>
+
+							<joystick-stick xaxis="X" yaxis="Y" 
+								style="width: 50vmin; height: 50vmin; left: calc(50% - 50vmin); top: calc(100% - 50vmin);">
+						 	</joystick-stick>
+							
+							<joystick-stick xaxis="RX" yaxis="RZ"
+								style="width: 50vmin; height: 50vmin; left: calc(50% + 0px); top: calc(100% - 50vmin);">
+						 	</joystick-stick>
+
+							<joystick-dpad class="dpad" style="position: absolute; left: 5px; top: 52px;"></joystick-dpad>
+
+							<joystick-button index="4" style="width:120px; height: 40px; left: 34px; top: 5px;">LB</joystick-button>
+							<joystick-button index="5" style="width:120px; height: 40px; right: 34px; top: 5px;">RB</joystick-button>
+
+						 	<div class="ps-buttons" style="position: absolute; right: 5px; top: 52px;">
+							 	<div class="bg">
+<!--
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="a" gradientUnits="userSpaceOnUse" cy="76.25" cx="77.41" r="73.94">
+      <stop stop-color="#606066" offset="0"/>
+      <stop stop-color="#606066" offset=".3"/>
+      <stop stop-color="#313135" offset=".8"/>
+      <stop stop-color="#313135" offset="1"/>
+    </radialGradient>
+  </defs>
+  <path d="M198 100A98 98 0 1 1 2 100 98 98 0 1 1 198 100z" fill="#F00"/>
+  <path d="M151.35 76.25a73.94 73.94 0 1 1-147.88 0 73.94 73.94 0 1 1 147.88 0z" transform="matrix(1.3256 0 0 1.3256 -2.618 -1.082)" stroke="#151314" stroke-width="2.26" fill="url(#a)"/>
+</svg>
+-->
+
+									<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 200 200">
+									  <path fill="rgba(0,0,0,0.1)" stroke="#454545" stroke-width="2" d="M77 5.8c-6.2 0-11.2 5-11.2 11.2v47.8H18c-6.2 0-11.2 5-11.2 11.2v46.6c0 6.2 5 11.5 11.2 11.2h47.8v47.8c0 6.2 5 11.2 11.2 11.2h46.6c6.2 0 11.2-5 11.2-11.2v-47.8h47.8c6.2 0 11.2-5 11.2-11.2V76c0-6.2-5-11.2-11.2-11.2h-47.8V17c0-6.2-5-11.2-11.2-11.2H77z"></path>
+									</svg>
+							 	</div>
+							 	<joystick-button index="2" icon="ps-buttons:square" icon-color="#FF69F8" class="icon-square" style="left: 3%; top: 33%;">
+									<iron-icon icon="ps-buttons:square"></iron-icon>
+						 		</joystick-button>
+
+							 	<joystick-button index="1" icon-color="rgb(255, 102, 102)" class="icon-circle" style="right: 3%; top: 33%;">
+									<iron-icon icon="ps-buttons:circle"></iron-icon>
+						  		</joystick-button>
+
+							 	<joystick-button index="3" icon-color="#40E2A0" class="icon-triangle" style="left: 33%; top: 3%;">
+									<iron-icon icon="ps-buttons:triangle"></iron-icon>
+							 	</joystick-button>
+							 	
+							 	<joystick-button index="0" icon-color="#7CB2E8" class="icon-x" style="left: 33%; bottom: 3%;">
+									<iron-icon icon="ps-buttons:x"></iron-icon>
+								</joystick-button>
+						 	</div>
+						</joystick>
+					</section>
+					
+					<section data-route="settings">
+						<paper-toolbar>
+							<paper-icon-button icon="icons:arrow-back" onclick="app.route='main';app.closeDrawer();"></paper-icon-button>
+						    <span class="title">Settings</span>
+						</paper-toolbar>
+						<div layout vertical style="padding: 1em;">
+							<!--
+							<paper-card class="layout vertical" heading="Connection" elevation="2">
+								<div class="card-content">
+						 		<paper-input id="input_host" label="Host" pattern="(?:\d+\.){3}\d*" placeholder="localhost"></paper-input>
+						 		<paper-input id="input_port" label="Port" auto-validate pattern="\d+" placeholder="8000"></paper-input>
+
+								</div>
+								<div class="card-actions">
+									<paper-button>Connect</paper-button>
+								</div>
+							</paper-card>
+							<br/>
+							-->
+							<paper-card class="layout vertical" heading="" elevation="2">
+								<div class="card-content">
+								<paper-toggle-button>Lock landscape</paper-toggle-button>
+
+								<div>Rate</div>
+						        <paper-slider value="{{app.joystick.rate}}" min="16" max="100" editable></paper-slider>
+								</div>
+							</paper-card>
+						</div>
+					</section>
+				</iron-pages>
+			</div>
+		</paper-drawer-panel responsive-width="1920">
+
+
+
+	 <paper-dialog id="modal" with-backdrop heading="Connect">
+	 		<paper-input value="{{host}}" id="input_host" label="Host" pattern="(?:\d+\.){3}\d*"></paper-input>
+	 		<paper-input value="{{port}}" id="input_port" label="Port" auto-validate pattern="\d+"></paper-input>
+	      <div class="buttons">
+	        <!-- <paper-button dialog-dismiss>Dismiss</paper-button> -->
+	        <paper-button autofocus onclick="app.connect()">Connect</paper-button>
+	      </div>
+	</paper-dialog>
+
+	<paper-toast id="toast" text=""></paper-toast>
+	</template>
+
+	<script src="static/js/app.js"></script>
+
+</body>
+</html>
