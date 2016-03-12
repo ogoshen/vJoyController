@@ -32,9 +32,14 @@ init:
 build_script:
 - cmd: >-
     pip install flask
+    
     pip install flask-socketio
+    
     pip install esky
+    
     pip install eventlet
+    
     pip install py2exe
 
     python -OO setup.py bdist_esky
+  
