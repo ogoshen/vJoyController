@@ -8,9 +8,10 @@ node_js:
 python:
   - "2.7"
 
-cache: pip
+# cache: pip
 
-before_install: 
+before_install:
+  - pip install --upgrade pip
   - sudo pip install flask
   - sudo pip install flask-socketio
   - sudo pip install esky
