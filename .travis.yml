@@ -1,16 +1,16 @@
 language: python
 python:
-	- "2.7"
+  - "2.7"
 
 install: 
-	- pip install flask
-	- pip install flask-socketio
-	- pip install esky
+  - pip install flask
+  - pip install flask-socketio
+  - pip install esky
 
 
 language: node_js
 node_js:
-	- "5.1.x"
+  - "5.1.x"
 before_script:
   - npm install -g polybuild
 script: build.js
