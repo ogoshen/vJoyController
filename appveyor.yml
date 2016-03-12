@@ -22,7 +22,7 @@ init:
   - cmd: python -c "import struct; print(struct.calcsize('P') * 8)"
 
   # Ensure node x86 (appveyor powershell script to switch installed versions)
-  - ps: Install-Product node 5.1.0 x86
+  - ps: Install-Product node 5.5.0 x86
   - cmd: node --version
   - cmd: npm --version
 
@@ -37,8 +37,7 @@ install:
   - cmd: npm install -g vulcanize
   - cmd: npm install shelljs@0.6.0
 
-  # Git clone happens between init and install 
-  - cmd: git submodule update --init --recursive
+  - cmd: bower install
 
   # Upgrade to the latest version of pip to avoid it displaying warnings
   # about it being out of date.
