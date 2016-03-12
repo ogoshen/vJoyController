@@ -12,6 +12,10 @@ platform: x86
 
 configuration: Release
 
+cache:
+  - node_modules                    # local npm modules
+  - '%APPDATA%\npm-cache'           # npm cache
+  
 init:
   - cmd: ECHO Processor architecture - %PROCESSOR_ARCHITECTURE%
   - cmd: wmic OS get OSArchitecture
@@ -55,6 +59,10 @@ install:
   # - cmd: python -OO setup.py bdist_esky
   - cmd: node build.js
 
-
 # Not a project with an msbuild file, build done at install.
 build: off 
+
+artifacts:
+  # Archive the generated packages in the ci.appveyor.com build report.
+  - path: dist\*
+  
