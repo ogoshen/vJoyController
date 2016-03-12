@@ -8,10 +8,13 @@ node_js:
 python:
   - "2.7"
 
+cache: pip
+
 before_install: 
   - sudo pip install flask
   - sudo pip install flask-socketio
   - sudo pip install esky
+  - sudo pip install eventlet
   - npm install -g bower
   - npm install -g polybuild
   - npm install -g vulcanize
