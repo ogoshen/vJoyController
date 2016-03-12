@@ -14,6 +14,7 @@ before_install:
   - sudo pip install esky
   - npm install -g bower
   - npm install -g polybuild
+  - npm install -g vulcanize
   - npm install shelljs@0.6.0
 
 
