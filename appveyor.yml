@@ -32,6 +32,11 @@ init:
 
 
 install:
+  - cmd: npm install -g bower
+  - cmd: npm install -g polybuild
+  - cmd: npm install -g vulcanize
+  - cmd: npm install shelljs@0.6.0
+
   # Git clone happens between init and install 
   - cmd: git submodule update --init --recursive
 
@@ -48,7 +53,9 @@ install:
   - cmd: pip install py2exe_py2
   - cmd: pip install cx-Freeze
 
-  - cmd: python -OO setup.py bdist_esky
+  # - cmd: python -OO setup.py bdist_esky
+  - cmd: node build.js
+
 
 # Not a project with an msbuild file, build done at install.
 build: off 
