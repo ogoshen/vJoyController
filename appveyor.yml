@@ -13,6 +13,7 @@ platform: x86
 configuration: Release
 
 cache:
+  - static/bower_components
   - node_modules                    # local npm modules
   - '%APPDATA%\npm-cache'           # npm cache
   
