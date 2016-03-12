@@ -12,6 +12,7 @@ before_install:
   - sudo pip install flask
   - sudo pip install flask-socketio
   - sudo pip install esky
+  - npm install -g bower
   - npm install -g polybuild
   - npm install -g shelljs
 
