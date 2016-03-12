@@ -15,7 +15,7 @@ before_install:
   - sudo pip install flask-socketio
   - sudo pip install esky
   - sudo pip install eventlet
-  - sudo pip install py2exe-py2
+  - sudo pip install py2exe
   - npm install -g bower
   - npm install -g polybuild
   - npm install -g vulcanize
