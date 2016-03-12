@@ -1,0 +1,40 @@
+<dom-module id="joystick-socket">
+  <template>
+    <style>
+      :host {
+      }
+    </style>
+    <content></content>
+  </template>
+
+  <script>
+    Polymer({
+      is: "joystick-socket",
+
+      properties: {
+
+        host: {
+          type: String,
+          value: 'localhost',
+          reflectToAttribute: true
+        },
+
+        port: {
+          type: Number,
+          value: 8000,
+          reflectToAttribute: true
+        },
+
+        rate: {
+          type: Number,
+          value: 33,
+          notify: true,
+          reflectToAttribute: true
+        },
+
+      },
+
+    });
+  </script>
+
+</dom-module>

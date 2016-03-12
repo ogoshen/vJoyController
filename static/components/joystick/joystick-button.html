@@ -1,0 +1,119 @@
+<dom-module id="joystick-button">
+
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: absolute;
+        box-sizing: border-box;
+        width: 60px;
+        height: 60px;
+        border-radius: 30px;
+        line-height: 34px;
+        -webkit-user-select: none;
+        outline: none;
+        text-align: center;
+        vertical-align: center;
+        font-weight: lighter;
+        font-size: 12px;
+        color: hsl(240, 3%, 60%);
+        text-shadow: 0 0px 2px #222;
+        border: 2px solid hsla(240,3%,22%,1);
+        background: radial-gradient(ellipse 80% 75% at center 26%, hsla(240,3%,39%,1) 21%, hsla(240,3%,27%,1) 88%);
+        box-shadow: 0 2px 0px hsl(240,3%,25%), 0 -4px 1px hsla(240, 3%, 4%, 0.4) inset, 0 -5px 0px hsl(240,3%,36%) inset, 0 1px 5px rgba(0, 0, 0, 0.3);
+        cursor: default;
+        font-size: 14px;
+        transition: all 100ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      };
+
+      :host([pressed]) {
+      /*:host.pressed {*/
+        line-height: 38px;
+        color: var(--paper-purple-200);
+        background: radial-gradient(ellipse 80% 75% at center 36%, hsla(240,3%,35%,1) 40%, hsla(240,3%,26%,1) 97%);
+        border: 2px solid hsla(240,3%,21%,1);
+        box-shadow: 0 2px 0px hsl(240,3%,22%), 0 -2px 1px hsl(240, 3%, 23%) inset, 0 -3px 0px hsl(240,3%,35%) inset, 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+    </style>
+    <content>
+      <!-- <iron-icon id="icon" icon="[icon]]"></iron-icon> -->
+    </content>
+  </template>
+
+  <script>
+    // element registration
+    Polymer({
+      is: "joystick-button",
+
+      hostAttributes: {
+        role: 'button',
+        tabindex: '0'
+      },
+
+      properties: {
+        // declare properties for the element's public API
+        index: {
+          type: Number,
+          value: 0
+        },
+
+        icon: {
+          type: String
+        },
+
+        iconColor: {
+          type: String,
+          value: "#FFF",
+          reflectToAttribute: true
+        },
+
+        pressed: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          reflectToAttribute: true
+        },
+
+        disabled: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          reflectToAttribute: true
+        },
+
+      },
+
+      listeners: {
+        'down': '_press',
+        'up': '_release',
+        'touchstart': '_press',
+        'touchend': '_release',
+        // 'track': '_track',
+      },
+
+      // _track: function(e) {
+      //   // console.log(e);
+      //   // console.log(this);
+      //   var h = e.detail.hover();
+      //   this.pressed = (h == this || this.contains(h));
+      //   if(this.pressed)
+      //     this.fire('down', e);
+      //   else
+      //     this.fire('up', e);      
+      // },
+
+      _press: function(e) {
+        if (this.disabled)
+          return;
+        this.pressed = true;
+      },
+
+      _release: function(e) {
+        if (this.disabled)
+          return;
+        this.pressed = false;
+      },
+    });
+  </script>
+
+</dom-module>
