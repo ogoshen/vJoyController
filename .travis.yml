@@ -14,7 +14,7 @@ before_install:
   - sudo pip install esky
   - npm install -g bower
   - npm install -g polybuild
-  - npm install -g shelljs
+  - npm install -g shelljs@0.6.0
 
 
 install:
