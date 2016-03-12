@@ -8,7 +8,7 @@ import flask.ext.socketio
 import eventlet
 import engineio
 from flask.ext.socketio import SocketIO, emit
-from vjoy.VirtualJoystick import *
+# from vjoy.VirtualJoystick import *
 
 from esky import bdist_esky
 from esky.bdist_esky import Executable  
