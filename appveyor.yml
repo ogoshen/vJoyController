@@ -58,8 +58,8 @@ install:
 
   # - cmd: python -OO setup.py bdist_esky
 
-  - cmd: node build.js version -- {build}
-  - cmd: for /f %i in (version.txt) do appveyor UpdateBuild -Version %i
+  - cmd: node build.js version -- %APPVEYOR_BUILD_VERSION%
+  #- cmd: for /f %i in (version.txt) do appveyor UpdateBuild -Version %i
 
   - cmd: node build.js
 
