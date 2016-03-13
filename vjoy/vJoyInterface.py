@@ -36,7 +36,6 @@ class vJoyInterface(object):
                or imp.is_frozen("__main__")) # tools/freeze
 
     dll = "./VJoyInterface.dll" if main_is_frozen() else os.path.join(os.path.dirname(__file__), "VJoyInterface.dll")
-    print dll
     vJoyInterface_dll = ctypes.cdll.LoadLibrary(dll)
 
     functions = {
