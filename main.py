@@ -9,6 +9,7 @@ import time
 import esky
 import sys
 
+VERSION="0.1.0"
 
 if getattr(sys, "frozen", False):
     # app = esky.Esky(sys.executable,"https://example-app.com/downloads/")
@@ -141,6 +142,7 @@ if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument('server', nargs='?', type=str, help='Hostname', default=host)
 	parser.add_argument('port', nargs='?', type=int, help='Port number', default=80)
+	parser.add_argument('--version', action='version', version='%(prog)s ' + VERSION)
 	
 	args = parser.parse_args()
 	socketio.run(app, host=args.server, port=args.port)

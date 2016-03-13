@@ -1,4 +1,4 @@
-version: 1.0.{build}
+version: 0.0.{build}
 
 environment:
   # nodejs_version: "0.12.7"
@@ -32,26 +32,24 @@ init:
 
 
 install:
-  - cmd: npm install -g bower
-  - cmd: npm install -g polybuild
-  - cmd: npm install -g vulcanize
-  - cmd: npm install shelljs@0.6.0
+  # - cmd: git submodule update --init --recursive
 
-  # Git clone happens between init and install 
-  - cmd: git submodule update --init --recursive
+  # - cmd: npm install -g bower
+  # - cmd: npm install -g polybuild
+  # - cmd: npm install -g vulcanize
+  # - cmd: npm install shelljs@0.6.0 between init and install 
 
-  # Upgrade to the latest version of pip to avoid it displaying warnings
-  # about it being out of date.
-  - cmd: pip install --disable-pip-version-check --user --upgrade pip
+  # # Upgrade to the latest version of pip to avoid it displaying warnings
+  # # about it being out of date.
+  # - cmd: pip install --disable-pip-version-check --user --upgrade pip
 
-  # Install python dependencies
-  # - cmd: pip install https://dl.dropboxusercontent.com/u/74034/ardublockly-dep/win/py2exe-0.6.10a1-cp27-none-win32.whl
-  - cmd: pip install flask
-  - cmd: pip install flask-socketio
-  - cmd: pip install esky
-  - cmd: pip install eventlet
-  - cmd: pip install py2exe_py2
-  - cmd: pip install cx-Freeze
+  # # Install python dependencies
+  # - cmd: pip install flask
+  # - cmd: pip install flask-socketio
+  # - cmd: pip install esky
+  # - cmd: pip install eventlet
+  # - cmd: pip install py2exe_py2
+  # - cmd: pip install cx-Freeze
 
   # - cmd: python -OO setup.py bdist_esky
   - cmd: node build.js
