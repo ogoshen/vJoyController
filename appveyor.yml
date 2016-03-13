@@ -1,4 +1,4 @@
-version: 0.0.{build}
+# version: 0.0.{build}
 
 environment:
   # nodejs_version: "0.12.7"
@@ -59,8 +59,9 @@ install:
   # - cmd: python -OO setup.py bdist_esky
 
   - cmd: node build.js
+  - cmd: for /f %i in (version.txt) do appveyor UpdateBuild -Version %i
 
-# Not a project with an msbuild file, build done at install.
+Not a project with an msbuild file, build done at install.
 build: off 
 
 artifacts:

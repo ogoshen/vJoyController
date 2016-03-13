@@ -52,7 +52,7 @@ esky_opts = {
 setup(
 	name='vjoy',
 	# console=['main.py'],
-	version=fopen('version.txt').read(),
+	version=open('version.txt').read(),
 	scripts=executables,
 	data_files=[
 		('.', vjoy_files),
