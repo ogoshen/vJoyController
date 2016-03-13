@@ -61,7 +61,7 @@ install:
   - cmd: node build.js
   - cmd: for /f %i in (version.txt) do appveyor UpdateBuild -Version %i
 
-Not a project with an msbuild file, build done at install.
+# Not a project with an msbuild file, build done at install.
 build: off 
 
 artifacts:
