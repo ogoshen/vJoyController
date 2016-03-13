@@ -1,6 +1,7 @@
 require('shelljs/make');
 
 target.all = function() {
+	// target.version();
 	target.dependencies();
 	target.polybuild();
 	target.deploy();
@@ -35,6 +36,13 @@ target.dependencies = function() {
 		exec(pip + ' install ' + i);
 	});
 
+}
+
+target.version = function(args) {
+	var py = grep('VERSION=', 'main.py').match(/VERSION=['"](.*)['"]/)[1];
+	// var git = exec('git rev-parse --short HEAD', {silent:true}).stdout;
+	var ver = py + '.' + (args[0] || '');
+	echo(ver).to('version.txt');
 }
 
 target.polybuild = function(args) {
