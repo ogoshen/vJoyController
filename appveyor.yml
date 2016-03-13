@@ -12,6 +12,11 @@ platform: x86
 
 configuration: Release
 
+cache:
+  - static/bower_components
+  - node_modules                    # local npm modules
+  - '%APPDATA%\npm-cache'           # npm cache
+
 init:
   - cmd: ECHO Processor architecture - %PROCESSOR_ARCHITECTURE%
   - cmd: wmic OS get OSArchitecture
@@ -22,7 +27,7 @@ init:
   - cmd: python -c "import struct; print(struct.calcsize('P') * 8)"
 
   # Ensure node x86 (appveyor powershell script to switch installed versions)
-  - ps: Install-Product node 5.1.0 x86
+  - ps: Install-Product node 5.5.0 x86
   - cmd: node --version
   - cmd: npm --version
 
@@ -52,8 +57,12 @@ install:
   # - cmd: pip install cx-Freeze
 
   # - cmd: python -OO setup.py bdist_esky
-  - cmd: node build.js
 
+  - cmd: node build.js
 
 # Not a project with an msbuild file, build done at install.
 build: off 
+
+artifacts:
+  # Archive the generated packages in the ci.appveyor.com build report.
+  - path: dist\*
