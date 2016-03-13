@@ -40,10 +40,9 @@ target.dependencies = function() {
 
 target.version = function() {
 	var py = grep('VERSION=', 'main.py').match(/VERSION=['"](.*)['"]/)[1];
-	var git = exec('git rev-parse --short HEAD', {silent:true}).stdout;
-	var version = py + '-' + git;
-	echo(version).to('version.txt');
-	return version;
+	// var git = exec('git rev-parse --short HEAD', {silent:true}).stdout;
+	// echo(py + '.' + git).to('version.txt');
+	echo(py).to('version.txt');
 }
 
 target.polybuild = function(args) {

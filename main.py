@@ -9,7 +9,7 @@ import time
 import esky
 import sys
 
-VERSION="0.0.1"
+VERSION="0.1"
 
 if getattr(sys, "frozen", False):
     # app = esky.Esky(sys.executable,"https://example-app.com/downloads/")
